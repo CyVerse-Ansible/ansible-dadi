@@ -1,0 +1,8 @@
+---
+# defaults file for ansible-dadi
+DADI_CLI_REPO: "https://github.com/xin-huang/dadi-cli"
+DADI_CLI_REPO_VERSION: master
+DADI_ENABLE_AUTO_CLI: "false"
+DADI_CLI_PARAMETERS: ""
+DADI_ENABLE_WORKQUEUE_FACTORY: "false"
+DADI_PROJECT_NAME: ""

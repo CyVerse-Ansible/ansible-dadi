@@ -1,0 +1,65 @@
+---
+# tasks file for ansible-dadi
+- name: APT; update packages
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: yes
+
+- name: GET_URL; download mamba forge
+  ansible.builtin.get_url:
+    url: "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    dest: "/home/dadi/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    owner: dadi
+    mode: "0775"
+
+- name: "SHELL; execute Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+  ansible.builtin.shell:
+    cmd: "Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh -b"
+    chdir: /home/dadi
+  become: true
+  become_user: dadi
+
+- name: "FILE; remove the mamba forge file"
+  ansible.builtin.file:
+    path: "/home/dadi/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    state: absent
+
+- name: "GIT; clone dadi-cli from {{ DADI_CLI_REPO }}"
+  ansible.builtin.git:
+    repo: "{{ DADI_CLI_REPO }}"
+    dest: /home/dadi/dadi-cli
+    version: "{{ DADI_CLI_REPO_VERSION }}"
+  become: true
+  become_user: dadi
+
+- name: COPY; copy the profile in /home/dadi/.profile
+  ansible.builtin.copy:
+    src: profile.sh
+    dest: /home/dadi/.profile
+    owner: dadi
+    mode: '0755'
+
+- name: COPY; create the workqueue password
+  ansible.builtin.copy:
+    content: "{{ DADI_WORKQUEUE_PASSWORD }}"
+    dest: /home/dadi/wqpw
+    owner: dadi
+  when: DADI_WORKQUEUE_PASSWORD is defined and DADI_WORKQUEUE_PASSWORD|length > 0
+
+# TODO: need to check if project name is set 
+- name: SHELL; execute the dadi-cli, when enabled
+  ansible.builtin.shell:
+    cmd: "dadi-cli {{ DADI_CLI_PARAMETERS }} --work-queue '{{ DADI_PROJECT_NAME }}' /home/dadi/wqpw &"
+    chdir: /home/dadi
+  become: true
+  become_user: dadi
+  when: DADI_ENABLE_AUTO_CLI|bool == True
+
+# TODO: need to check if project name is set 
+- name: SHELL; execute work_queue_factory, when enabled
+  ansible.builtin.shell:
+    cmd: "work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/dadi/wqpw -E '--connection-mode by_apparent_ip'"
+    chdir: /home/dadi
+  become: true
+  become_user: dadi
+  when: DADI_ENABLE_AUTO_CLI|bool == True
