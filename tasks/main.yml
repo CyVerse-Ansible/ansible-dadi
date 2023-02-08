@@ -46,9 +46,9 @@
   ansible.builtin.shell:
     cmd: "mamba env create -f dadi-cli/conda-env.yml"
     chdir: "/home/{{ DADI_USER }}"
+    executable: /bin/bash
   become: true
   become_user: "{{ DADI_USER }}"
-  executable: /bin/bash
 
 - name: COPY; copy the profile in /home/{{ DADI_USER }}/.profile
   ansible.builtin.copy:
