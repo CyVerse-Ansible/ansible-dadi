@@ -42,6 +42,13 @@
   become: true
   become_user: "{{ DADI_USER }}"
 
+- name: "SHELL; execute Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+  ansible.builtin.shell:
+    cmd: "mamba env create -f dadi-cli/conda-env.yml"
+    chdir: "/home/{{ DADI_USER }}"
+  become: true
+  become_user: "{{ DADI_USER }}"
+
 - name: COPY; copy the profile in /home/{{ DADI_USER }}/.profile
   ansible.builtin.copy:
     src: profile.sh
@@ -55,7 +62,7 @@
       {{ DADI_WORKQUEUE_PASSWORD }}
     dest: "/home/{{ DADI_USER }}/wqpw"
     owner: "{{ DADI_USER }}"
-  when: (DADI_WORKQUEUE_PASSWORD is defined) and (DADI_WORKQUEUE_PASSWORD|default("") != "")
+  when: DADI_WORKQUEUE_PASSWORD is defined and DADI_WORKQUEUE_PASSWORD is string and DADI_WORKQUEUE_PASSWORD|length > 0
 
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
