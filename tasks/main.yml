@@ -52,7 +52,7 @@
 - name: COPY; create the workqueue password
   ansible.builtin.copy:
     content: |
-      "{{ DADI_WORKQUEUE_PASSWORD }}"
+      {{ DADI_WORKQUEUE_PASSWORD }}
     dest: "/home/{{ DADI_USER }}/wqpw"
     owner: "{{ DADI_USER }}"
   when: (DADI_WORKQUEUE_PASSWORD is defined) and (DADI_WORKQUEUE_PASSWORD|default("") != "")
