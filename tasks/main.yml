@@ -3,7 +3,7 @@
 - name: FAIL; will fail if DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME is not set AND if DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true
   ansible.builtin.fail:
     msg: "If DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true, then you must set DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME"
-  when: (DADI_ENABLE_AUTO_CLI|bool == True or DADI_ENABLE_WORKQUEUE_FACTORY|bool == True) and (DADI_WORKQUEUE_PASSWORD is not defined or DADI_WORKQUEUE_PASSWORD|length == 0 or DADI_PROJECT_NAME is not defined or DADI_PROJECT_NAME|length == 0)
+  when: (DADI_ENABLE_AUTO_CLI|bool == True or DADI_ENABLE_WORKQUEUE_FACTORY|bool == True) and (DADI_WORKQUEUE_PASSWORD|length == 0  or DADI_PROJECT_NAME|length == 0)
 
 - name: APT; update packages
   ansible.builtin.apt:
