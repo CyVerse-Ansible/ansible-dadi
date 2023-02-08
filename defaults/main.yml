@@ -1,5 +1,6 @@
 ---
 # defaults file for ansible-dadi
+DADI_USER: "dadi"
 DADI_CLI_REPO: "https://github.com/xin-huang/dadi-cli"
 DADI_CLI_REPO_VERSION: master
 DADI_ENABLE_AUTO_CLI: "false"

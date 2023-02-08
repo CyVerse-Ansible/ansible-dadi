@@ -1,65 +1,75 @@
 ---
 # tasks file for ansible-dadi
+- name: FAIL; will fail if DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME is not set AND if DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true
+  ansible.builtin.fail:
+    msg: "If DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true, then you must set DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME"
+  when: (DADI_ENABLE_AUTO_CLI|bool == True or DADI_ENABLE_WORKQUEUE_FACTORY|bool == True) and (DADI_WORKQUEUE_PASSWORD is not defined or DADI_WORKQUEUE_PASSWORD|length == 0 or DADI_PROJECT_NAME is not defined or DADI_PROJECT_NAME|length == 0)
+
 - name: APT; update packages
   ansible.builtin.apt:
     update_cache: yes
     upgrade: yes
+  register: apt_action
+  retries: 30
+  delay: 10
+  until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+  become: true
 
 - name: GET_URL; download mamba forge
   ansible.builtin.get_url:
     url: "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
-    dest: "/home/dadi/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
-    owner: dadi
+    dest: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    owner: "{{ DADI_USER }}"
     mode: "0775"
 
 - name: "SHELL; execute Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
   ansible.builtin.shell:
-    cmd: "Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh -b"
-    chdir: /home/dadi
+    cmd: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh -b"
+    chdir: "/home/{{ DADI_USER }}"
   become: true
-  become_user: dadi
+  become_user: "{{ DADI_USER }}"
 
 - name: "FILE; remove the mamba forge file"
   ansible.builtin.file:
-    path: "/home/dadi/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    path: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
     state: absent
 
 - name: "GIT; clone dadi-cli from {{ DADI_CLI_REPO }}"
   ansible.builtin.git:
     repo: "{{ DADI_CLI_REPO }}"
-    dest: /home/dadi/dadi-cli
+    dest: /home/{{ DADI_USER }}/dadi-cli
     version: "{{ DADI_CLI_REPO_VERSION }}"
   become: true
-  become_user: dadi
+  become_user: "{{ DADI_USER }}"
 
-- name: COPY; copy the profile in /home/dadi/.profile
+- name: COPY; copy the profile in /home/{{ DADI_USER }}/.profile
   ansible.builtin.copy:
     src: profile.sh
-    dest: /home/dadi/.profile
-    owner: dadi
+    dest: "/home/{{ DADI_USER }}/.profile"
+    owner: "{{ DADI_USER }}"
     mode: '0755'
 
 - name: COPY; create the workqueue password
   ansible.builtin.copy:
     content: "{{ DADI_WORKQUEUE_PASSWORD }}"
-    dest: /home/dadi/wqpw
-    owner: dadi
+    dest: "/home/{{ DADI_USER }}/wqpw"
+    owner: "{{ DADI_USER }}"
   when: DADI_WORKQUEUE_PASSWORD is defined and DADI_WORKQUEUE_PASSWORD|length > 0
 
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
   ansible.builtin.shell:
-    cmd: "dadi-cli {{ DADI_CLI_PARAMETERS }} --work-queue '{{ DADI_PROJECT_NAME }}' /home/dadi/wqpw &"
-    chdir: /home/dadi
+    cmd: "dadi-cli {{ DADI_CLI_PARAMETERS }} --work-queue '{{ DADI_PROJECT_NAME }}' /home/{{ DADI_USER }}/wqpw &"
+    chdir: "/home/{{ DADI_USER }}"
   become: true
-  become_user: dadi
+  become_user: "{{ DADI_USER }}"
   when: DADI_ENABLE_AUTO_CLI|bool == True
 
 # TODO: need to check if project name is set 
 - name: SHELL; execute work_queue_factory, when enabled
   ansible.builtin.shell:
-    cmd: "work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/dadi/wqpw -E '--connection-mode by_apparent_ip'"
-    chdir: /home/dadi
+    cmd: "work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/{{ DADI_USER }}/wqpw -E '--connection-mode by_apparent_ip'"
+    chdir: "/home/{{ DADI_USER }}"
   become: true
-  become_user: dadi
+  become_user: "{{ DADI_USER }}"
   when: DADI_ENABLE_AUTO_CLI|bool == True

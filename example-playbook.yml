@@ -1,0 +1,4 @@
+- name: Execute Dadi
+  hosts: all
+  roles:
+    - ansible-dadi

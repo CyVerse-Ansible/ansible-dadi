@@ -1,7 +1,7 @@
 galaxy_info:
-  author: your name
-  description: your role description
-  company: your company (optional)
+  author: CyVerse
+  description: Installs dadi, https://bitbucket.org/gutenkunstlab/dadi/src/master/,  onto a cloud instance
+  company: 
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -14,7 +14,7 @@ galaxy_info:
   # - GPL-3.0-only
   # - Apache-2.0
   # - CC-BY-4.0
-  license: license (GPL-2.0-or-later, MIT, etc)
+  license: Apache-2.0
 
   min_ansible_version: 2.1
 
@@ -27,7 +27,7 @@ galaxy_info:
   # To view available platforms and versions (or releases), visit:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
-  # platforms:
+  platforms:
   # - name: Fedora
   #   versions:
   #   - all
@@ -38,8 +38,11 @@ galaxy_info:
   #   - 1.0
   #   - 7
   #   - 99.99
+  - name: Ubuntu
+    versions:
+    - 22.04
 
-  galaxy_tags: []
+  galaxy_tags: [dadi,cyverse]
     # List tags for your role here, one per line. A tag is a keyword that describes
     # and categorizes the role. Users find roles by searching for tags. Be sure to
     # remove the '[]' above, if you add tags to this list.

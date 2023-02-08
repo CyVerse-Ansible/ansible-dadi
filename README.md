@@ -1,4 +1,4 @@
-Role Name
+Ansible Dadi
 =========
 
 Role to configure and install dependencies for dadi-cli onto an Ubuntu instance
@@ -11,6 +11,7 @@ Role Variables
 --------------
 Variable Name | Default value if not defined | Description
 ------------- | ---------------------- | -----------
+DADI_USER | dadi | the username to install dadi (note, some clouds will install under a separate user)
 DADI_CLI_REPO | "https://github.com/xin-huang/dadi-cli" | repo to download dadi cli
 DADI_CLI_REPO_VERSION | master | branch to use
 DADI_ENABLE_AUTO_CLI | "false" | if true, run dadi-cli automatically
@@ -24,7 +25,7 @@ Dependencies
 Example Playbook
 ----------------
 
-
+example-playbook.yml
 
 License
 -------
