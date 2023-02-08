@@ -54,7 +54,7 @@
     content: "{{ DADI_WORKQUEUE_PASSWORD }}"
     dest: "/home/{{ DADI_USER }}/wqpw"
     owner: "{{ DADI_USER }}"
-  when: (DADI_WORKQUEUE_PASSWORD is defined) and (DADI_WORKQUEUE_PASSWORD|length > 0)
+  when: (DADI_WORKQUEUE_PASSWORD is defined) and (DADI_WORKQUEUE_PASSWORD|default("") != "")
 
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
