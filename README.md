@@ -17,6 +17,7 @@ DADI_CLI_REPO_VERSION | master | branch to use
 DADI_ENABLE_AUTO_CLI | "false" | if true, run dadi-cli automatically
 DADI_CLI_PARAMETERS | "" | if set, will pass parameters into the cli
 DADI_ENABLE_WORKQUEUE_FACTORY | "false" | if true, run workqueue_factory automatically
+DADI_WORKQUEUE_PASSWORD | none | workqueue password
 DADI_PROJECT_NAME | "" | required if DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true
 
 Dependencies
