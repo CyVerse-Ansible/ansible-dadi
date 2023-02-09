@@ -44,9 +44,8 @@
 
 - name: "SHELL; install dadi-cli requirements"
   ansible.builtin.shell:
-    cmd: "mamba env create -f dadi-cli/conda-env.yml"
+    cmd: "/bin/bash -ci 'mamba env create -f dadi-cli/conda-env.yml'"
     chdir: "/home/{{ DADI_USER }}"
-    executable: /bin/bash
   become: true
   become_user: "{{ DADI_USER }}"
 
