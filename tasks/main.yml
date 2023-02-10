@@ -64,18 +64,6 @@
     owner: "{{ DADI_USER }}"
   when: DADI_WORKQUEUE_PASSWORD is defined and DADI_WORKQUEUE_PASSWORD is string and DADI_WORKQUEUE_PASSWORD != ""
 
-- name: debugging
-  ansible.builtin.debug:
-    var: DADI_ENABLE_AUTO_CLI
-
-- name: debugging
-  ansible.builtin.debug:
-    var: DADI_PROJECT_NAME
-
-- name: debugging
-  ansible.builtin.debug:
-    var: DADI_ENABLE_WORKQUEUE_FACTORY
-
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
   ansible.builtin.shell:
@@ -88,7 +76,7 @@
 # TODO: need to check if project name is set 
 - name: SHELL; execute work_queue_factory, when enabled
   ansible.builtin.shell:
-    cmd: "work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/{{ DADI_USER }}/wqpw -E '--connection-mode by_apparent_ip' &"
+    cmd: "work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/{{ DADI_USER }}/wqpw -E '--connection-mode by_apparent_ip' -d all > wq.txt 2> err.txt &"
     chdir: "/home/{{ DADI_USER }}"
   become: true
   become_user: "{{ DADI_USER }}"
