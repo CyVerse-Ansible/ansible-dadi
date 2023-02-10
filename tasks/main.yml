@@ -49,10 +49,10 @@
   become: true
   become_user: "{{ DADI_USER }}"
 
-- name: COPY; copy the profile in /home/{{ DADI_USER }}/.profile
+- name: COPY; copy the profile in /home/{{ DADI_USER }}/.bashrc
   ansible.builtin.copy:
     src: profile.sh
-    dest: "/home/{{ DADI_USER }}/.profile"
+    dest: "/home/{{ DADI_USER }}/.bashrc"
     owner: "{{ DADI_USER }}"
     mode: '0755'
 
