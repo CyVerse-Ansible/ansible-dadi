@@ -67,7 +67,7 @@
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
   ansible.builtin.shell:
-    cmd: "dadi-cli {{ DADI_CLI_PARAMETERS }} --work-queue '{{ DADI_PROJECT_NAME }}' /home/{{ DADI_USER }}/wqpw > dc.txt 2> dc.err &"
+    cmd: "mambaforge/envs/dadi-cli/bin/dadi-cli {{ DADI_CLI_PARAMETERS }} --work-queue '{{ DADI_PROJECT_NAME }}' /home/{{ DADI_USER }}/wqpw > dc.txt 2> dc.err &"
     chdir: "/home/{{ DADI_USER }}"
     executable: /bin/bash
   become: true
@@ -77,7 +77,7 @@
 # TODO: need to check if project name is set 
 - name: SHELL; execute work_queue_factory, when enabled
   ansible.builtin.shell:
-    cmd: "work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/{{ DADI_USER }}/wqpw -E '--connection-mode by_apparent_ip' -d all > wq.txt 2> wq.err &"
+    cmd: "mambaforge/envs/dadi-cli/bin/work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/{{ DADI_USER }}/wqpw -E '--connection-mode by_apparent_ip' -d all > wq.txt 2> wq.err &"
     chdir: "/home/{{ DADI_USER }}"
     executable: /bin/bash
   become: true
