@@ -49,12 +49,14 @@
   become: true
   become_user: "{{ DADI_USER }}"
 
-- name: COPY; copy the profile in /home/{{ DADI_USER }}/.bashrc
-  ansible.builtin.copy:
-    src: profile.sh
-    dest: "/home/{{ DADI_USER }}/.bashrc"
-    owner: "{{ DADI_USER }}"
-    mode: '0755'
+- name: BLOCKFILE; copy the profile in /home/{{ DADI_USER }}/.bashrc
+  ansible.builtin.blockfile:
+    path: "/home/{{ DADI_USER }}/.bashrc"
+    block: |
+      export CATALOG_UPDATE_PROTOCOL=tcp
+      . mambaforge/etc/profile.d/conda.sh
+      . mambaforge/etc/profile.d/mamba.sh
+      conda activate dadi-cli
 
 - name: COPY; create the workqueue password
   ansible.builtin.copy:
