@@ -49,8 +49,8 @@
   become: true
   become_user: "{{ DADI_USER }}"
 
-- name: BLOCKFILE; copy the profile in /home/{{ DADI_USER }}/.bashrc
-  ansible.builtin.blockfile:
+- name: BLOCKINFILE; copy the profile in /home/{{ DADI_USER }}/.bashrc
+  ansible.builtin.blockinfile:
     path: "/home/{{ DADI_USER }}/.bashrc"
     block: |
       export CATALOG_UPDATE_PROTOCOL=tcp
