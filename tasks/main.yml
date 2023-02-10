@@ -50,11 +50,11 @@
   become_user: "{{ DADI_USER }}"
 
 - name: COPY; copy the profile in /home/{{ DADI_USER }}/.profile
-   ansible.builtin.copy:
-     src: profile.sh
-     dest: "/home/{{ DADI_USER }}/.profile"
-     owner: "{{ DADI_USER }}"
-     mode: '0755'
+  ansible.builtin.copy:
+    src: profile.sh
+    dest: "/home/{{ DADI_USER }}/.profile"
+    owner: "{{ DADI_USER }}"
+    mode: '0755'
 
 - name: COPY; create the workqueue password
   ansible.builtin.copy:
