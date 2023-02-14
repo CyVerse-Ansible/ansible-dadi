@@ -64,15 +64,6 @@
     owner: "{{ DADI_USER }}"
   when: DADI_WORKQUEUE_PASSWORD is defined and DADI_WORKQUEUE_PASSWORD is string and DADI_WORKQUEUE_PASSWORD != ""
 
-- name: DEBUG
-  ansible.builtin.debug:
-  var:
-  - DADI_ENABLE_AUTO_CLI
-  - DADI_ENABLE_WORKQUEUE_FACTORY
-  - DADI_CLI_PARAMETERS
-  - DADI_PROJECT_NAME
-  - DADI_WORKQUEUE_PASSWORD
-
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
   ansible.builtin.shell:
