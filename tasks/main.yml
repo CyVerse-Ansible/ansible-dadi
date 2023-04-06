@@ -67,7 +67,7 @@
 # TODO: need to check if project name is set 
 - name: SHELL; execute the dadi-cli, when enabled
   ansible.builtin.shell:
-    cmd: ". .profile && dadi-cli {{ DADI_CLI_PARAMETERS }} --work-queue '{{ DADI_PROJECT_NAME }}' /home/{{ DADI_USER }}/wqpw > dc.txt 2> dc.err &"
+    cmd: ". .profile && dadi-cli {{ DADI_CLI_PARAMETERS }} --email '{{ DADI_CLI_EMAIL }}' --work-queue '{{ DADI_PROJECT_NAME }}' /home/{{ DADI_USER }}/wqpw > dc.txt 2> dc.err &"
     chdir: "/home/{{ DADI_USER }}"
     executable: /bin/bash
   become: true
