@@ -64,17 +64,24 @@
     owner: "{{ DADI_USER }}"
   when: DADI_WORKQUEUE_PASSWORD is defined and DADI_WORKQUEUE_PASSWORD is string and DADI_WORKQUEUE_PASSWORD != ""
 
-# TODO: need to check if project name is set 
-- name: SHELL; execute the dadi-cli, when enabled
+- name: SHELL; execute the dadi-cli, when enabled, with workqueue
   ansible.builtin.shell:
     cmd: ". .profile && dadi-cli {{ DADI_CLI_PARAMETERS }} --email '{{ DADI_CLI_EMAIL }}' --work-queue '{{ DADI_PROJECT_NAME }}' /home/{{ DADI_USER }}/wqpw > dc.txt 2> dc.err &"
     chdir: "/home/{{ DADI_USER }}"
     executable: /bin/bash
   become: true
   become_user: "{{ DADI_USER }}"
-  when: DADI_ENABLE_AUTO_CLI|bool == True
+  when: DADI_ENABLE_AUTO_CLI|bool == True and DADI_CLI_USE_WORKQUEUE|bool == True and DADI_PROJECT_NAME is string and DADI_PROJECT_NAME != ""
 
-# TODO: need to check if project name is set 
+- name: SHELL; execute the dadi-cli, when enabled, without workqueue
+  ansible.builtin.shell:
+    cmd: ". .profile && dadi-cli {{ DADI_CLI_PARAMETERS }} --email '{{ DADI_CLI_EMAIL }}' > dc.txt 2> dc.err &"
+    chdir: "/home/{{ DADI_USER }}"
+    executable: /bin/bash
+  become: true
+  become_user: "{{ DADI_USER }}"
+  when: DADI_ENABLE_AUTO_CLI|bool == True and DADI_CLI_USE_WORKQUEUE|bool == False and DADI_PROJECT_NAME is string and DADI_PROJECT_NAME != ""
+
 - name: SHELL; execute work_queue_factory, when enabled
   ansible.builtin.shell:
     cmd: ". .profile && work_queue_factory -T local -M '{{ DADI_PROJECT_NAME }}' --password /home/{{ DADI_USER }}/wqpw -E '--connection-mode by_apparent_ip' -d all > wq.txt 2> wq.err &"
@@ -82,4 +89,4 @@
     executable: /bin/bash
   become: true
   become_user: "{{ DADI_USER }}"
-  when: DADI_ENABLE_WORKQUEUE_FACTORY|bool == True
+  when: DADI_ENABLE_WORKQUEUE_FACTORY|bool == True and DADI_PROJECT_NAME is string and DADI_PROJECT_NAME != ""
