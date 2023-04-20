@@ -1,9 +1,9 @@
 ---
 # tasks file for ansible-dadi
-- name: FAIL; will fail if DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME is not set AND if DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true
+- name: FAIL; will fail if DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME is not set AND if (DADI_ENABLE_AUTO_CLI and DADI_CLI_USE_WORKQUEUE) or DADI_ENABLE_WORKQUEUE_FACTORY
   ansible.builtin.fail:
-    msg: "If DADI_ENABLE_AUTO_CLI or DADI_ENABLE_WORKQUEUE_FACTORY is true, then you must set DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME"
-  when: (DADI_ENABLE_AUTO_CLI|bool == True or DADI_ENABLE_WORKQUEUE_FACTORY|bool == True) and (DADI_WORKQUEUE_PASSWORD|length == 0  or DADI_PROJECT_NAME|length == 0)
+    msg: "If DADI_ENABLE_AUTO_CLI and DADI_CLI_USE_WORKQUEUE are true or DADI_ENABLE_WORKQUEUE_FACTORY is true, then you must set DADI_WORKQUEUE_PASSWORD and DADI_PROJECT_NAME"
+  when: ((DADI_ENABLE_AUTO_CLI|bool == True and DADI_CLI_USE_WORKQUEUE|bool == True) or DADI_ENABLE_WORKQUEUE_FACTORY|bool == True) and (DADI_WORKQUEUE_PASSWORD|length == 0  or DADI_PROJECT_NAME|length == 0)
 
 - name: APT; update packages
   ansible.builtin.apt:
@@ -80,7 +80,7 @@
     executable: /bin/bash
   become: true
   become_user: "{{ DADI_USER }}"
-  when: DADI_ENABLE_AUTO_CLI|bool == True and DADI_CLI_USE_WORKQUEUE|bool == False and DADI_PROJECT_NAME is string and DADI_PROJECT_NAME != ""
+  when: DADI_ENABLE_AUTO_CLI|bool == True and DADI_CLI_USE_WORKQUEUE|bool == False
 
 - name: SHELL; execute work_queue_factory, when enabled
   ansible.builtin.shell:
