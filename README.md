@@ -16,7 +16,6 @@ DADI_CLI_REPO | "https://github.com/xin-huang/dadi-cli" | repo to download dadi 
 DADI_CLI_REPO_VERSION | master | branch to use
 DADI_ENABLE_AUTO_CLI | "false" | if true, run dadi-cli automatically
 DADI_CLI_PARAMETERS | "" | if set, will pass parameters into the cli
-DADI_CLI_EMAIL | "" | if set, the results will be emailed to the specified address
 DADI_CLI_USE_WORKQUEUE | "false" | if true, use workqueue when running dadi-cli automatically
 DADI_ENABLE_WORKQUEUE_FACTORY | "false" | if true, run workqueue_factory automatically
 DADI_WORKQUEUE_PASSWORD | none | workqueue password
