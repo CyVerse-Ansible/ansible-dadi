@@ -34,17 +34,16 @@
     path: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
     state: absent
 
-- name: "GIT; clone dadi-cli from {{ DADI_CLI_REPO }}"
-  ansible.builtin.git:
-    repo: "{{ DADI_CLI_REPO }}"
-    dest: /home/{{ DADI_USER }}/dadi-cli
-    version: "{{ DADI_CLI_REPO_VERSION }}"
+- name: "SHELL; get dadi-cli env file"
+  ansible.builtin.shell:
+    cmd: "wget https://raw.githubusercontent.com/xin-huang/dadi-cli/master/cloud-env.yml"
+    chdir: "/home/{{ DADI_USER }}"
   become: true
   become_user: "{{ DADI_USER }}"
 
 - name: "SHELL; install dadi-cli requirements"
   ansible.builtin.shell:
-    cmd: "mambaforge/condabin/mamba env create -f dadi-cli/conda-env.yml"
+    cmd: "mambaforge/condabin/mamba env create -f conda-env.yml"
     chdir: "/home/{{ DADI_USER }}"
   become: true
   become_user: "{{ DADI_USER }}"
