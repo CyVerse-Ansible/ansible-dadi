@@ -47,6 +47,8 @@
     chdir: "/home/{{ DADI_USER }}"
   become: true
   become_user: "{{ DADI_USER }}"
+  environment:
+    MAMBA_ROOT_PREFIX: "/home/{{ DADI_USER }}/mambaforge"
 
 - name: COPY; copy the profile in /home/{{ DADI_USER }}/.profile
   ansible.builtin.copy:
