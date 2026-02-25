@@ -17,21 +17,21 @@
 
 - name: GET_URL; download mamba forge
   ansible.builtin.get_url:
-    url: "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
-    dest: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    url: "https://github.com/conda-forge/miniforge/releases/download/24.11.0-1/Mambaforge-24.11.0-1-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    dest: "/home/{{ DADI_USER }}/Mambaforge-24.11.0-1-{{ ansible_system }}-{{ ansible_architecture }}.sh"
     owner: "{{ DADI_USER }}"
     mode: "0775"
 
-- name: "SHELL; execute Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+- name: "SHELL; execute Mambaforge-24.11.0-1-{{ ansible_system }}-{{ ansible_architecture }}.sh"
   ansible.builtin.shell:
-    cmd: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh -b"
+    cmd: "/home/{{ DADI_USER }}/Mambaforge-24.11.0-1-{{ ansible_system }}-{{ ansible_architecture }}.sh -b"
     chdir: "/home/{{ DADI_USER }}"
   become: true
   become_user: "{{ DADI_USER }}"
 
 - name: "FILE; remove the mamba forge file"
   ansible.builtin.file:
-    path: "/home/{{ DADI_USER }}/Mambaforge-{{ ansible_system }}-{{ ansible_architecture }}.sh"
+    path: "/home/{{ DADI_USER }}/Mambaforge-24.11.0-1-{{ ansible_system }}-{{ ansible_architecture }}.sh"
     state: absent
 
 - name: "SHELL; get dadi-cli env file"
